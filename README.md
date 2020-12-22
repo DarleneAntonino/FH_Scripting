@@ -6,8 +6,7 @@
 * [Viola Schlocker](mailto:viola.schlocker@edu.fh-joanneum.at)
 
 ### Description
-> What will we do
-We are planning to read an inputfile and compare it to a (existing?) database of quotes. If the inputfile matched one of the quotes, you will recive an email with this quote to an email address of your choice.
+> We are planning to read an inputfile and compare it to a (existing?) database of quotes. If the inputfile matches one of the quotes, you will recive an email with this quote to an email address of your choice.
 
 
 This "project" contains/will implement/focus on:
@@ -15,7 +14,7 @@ This "project" contains/will implement/focus on:
 * Access to Database (if we build it our own)
 * Regex
 * External Data Sources (if we use an already existing database)
-* User Interaction and Configuration
+* Notifications
 
 ## Installation/Prerequisites for your repository
 WIP
