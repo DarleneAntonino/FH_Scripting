@@ -1,4 +1,4 @@
-# FH_Scripting
+# QuoteChecker
 
 ## About
 ### Authors/Contributors
