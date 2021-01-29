@@ -27,20 +27,19 @@ def getSenderPW():
 
 #creates the E-Mail content dependig on the input
 def getEmailMSG(liste):
-	output = "Dear QuoteChecker-User,\n\n\n"
+	output = ""
 
 	for x in range(len(liste)):
 		toConvert = str(liste[x])
 		s = convertString(toConvert)
 		output += s + "\n"
 
-	output += "\n\nThank you for using our Service.\n\nKind regards,\nQuoteChecker"
 	return output
 
 
 #gets the users E-Mail; REGEX
 def getEmailRecipient():
-	regexEmail = (r'^[A-Za-z0-9]+[\._-]?[A-Za-z0-9]+[@]\w+[\.]\w{2,3}$')
+	regexEmail = (r'^[A-Za-z0-9]+[\._-]?[A-Za-z0-9]+[@].+[\.]\w{2,3}$')
 	emailRec = input("Please enter your email: ")
 
 	while True:
@@ -65,7 +64,7 @@ def sendEmail(liste):
 	SMPT_HOST = 'mail.gmx.net'
 	SMTP_PORT = 587
 	msg = EmailMessage()
-	msg.set_content(getEmailMSG(liste))
+	msg.set_content("Dear QuoteChecker-User,\n\n\n" + getEmailMSG(liste) + "\n\nThank you for using our Service.\n\nKind regards,\nQuoteChecker")
 	msg['Subject'] = 'QuoteChecker has your quote'
 	msg['From'] = SENDER
 	msg['To'] = RECIPIENT
@@ -195,40 +194,56 @@ except:
 	print ("Keine Verbindung zum Server")
 	exit(0)
 
+again = True
 fileContent = []
 foundQuotes = []
 msg = "Dear QuoteChecker-User,\n\nWe are sorry to tell you, that our programm could not find any quotes or authors matching your text.\nWe hope to see you again soon!\n\nRegards,\nQuoteChecker"
 
-print("Welcome to QuoteChecker!\nWould you like to read a file to enter multiple keywords(f) or enter one word manually in this terminal (t)?")
+print("Welcome to QuoteChecker!\n")
+while again:
+	print("Would you like to read a file to enter multiple keywords(f) or enter one word manually in this terminal (t)?")
 
-while True:
-	inpuBoo = input("file or terminal? (f/t): ")
-	if inpuBoo == "F" or inpuBoo == "f":
-		foundQuotes = choseFile(foundQuotes)
-		sound()
-		if type(foundQuotes) != list:
-			print(msg)
-			exit(0)
-		break
-	elif inpuBoo == "T" or inpuBoo == "t":
-		foundQuotes = choseTerminal(foundQuotes)
-		sound()
-		if len(foundQuotes) == 0:
-			print(msg)
-			exit(0)
-		break
-	else:
-		print("Please only type 'f' or 't'!\n")
+	while True:
+		inpuBoo = input("file or terminal? (f/t): ")
+		if inpuBoo == "F" or inpuBoo == "f":
+			foundQuotes = choseFile(foundQuotes)
+			sound()
+			if type(foundQuotes) != list:
+				print(msg)
+				exit(0)
+			break
+		elif inpuBoo == "T" or inpuBoo == "t":
+			foundQuotes = choseTerminal(foundQuotes)
+			sound()
+			if len(foundQuotes) == 0:
+				print(msg)
+				exit(0)
+			break
+		else:
+			print("Please only type 'f' or 't'!\n")
 
-while True:
-	sendBoo = input("Would you like to get an E-Mail with the findings? (y/n): ")
-	if sendBoo == "y" or sendBoo == "Y":
-		sendEmail(foundQuotes)
-		break
-	elif sendBoo == "n" or sendBoo == "N":
-		print("OK. We wish you a wonderfull day.")
-		break
-	else:
-		print("Please only type 'y' or 'n'!\n")
+	print("Would you like to get an E-Mail (e) with the findings or display them in the terminal(t)?")
+	while True:
+		sendBoo = input("Email or terminal? (e/t): ")
+		if sendBoo == "e" or sendBoo == "E":
+			sendEmail(foundQuotes)
+			break
+		elif sendBoo == "t" or sendBoo == "T":
+			print(getEmailMSG(foundQuotes))
+			break
+		else:
+			print("Please only type 'e' or 't'!\n")
 
+	while True:
+		sendBoo = input("Would you like to search for more? (y/n): ")
+		if sendBoo == "y" or sendBoo == "Y":
+			break
+		elif sendBoo == "n" or sendBoo == "N":
+			again = False
+			break
+		else:
+			print("Please only type 'y' or 'n'!\n")	
+
+
+print("We hope to see you again soon!")
 connection.close()
