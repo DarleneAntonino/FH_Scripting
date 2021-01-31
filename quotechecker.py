@@ -97,7 +97,7 @@ def getFileContent():
 
 	content = ""
 	for line in file:
-		content = line
+		content = line.replace("'", "")
 		lines.append(content)
 
 	file.close()
@@ -123,8 +123,10 @@ def getFileName():
 #will compare the cotent of the file with our Database (Quote)
 def compareWithDBQuote(inpu):
 	cursor = connection.cursor()
-	cursor.execute("SELECT * FROM quotes WHERE (quote_text LIKE '%"+inpu+"%' OR author LIKE '%"+inpu+"%')")
-	quotes = cursor.fetchall()
+	quotes = ""
+	if inpu != "":
+		cursor.execute("SELECT * FROM quotes WHERE (quote_text LIKE '%"+inpu+"%' OR author LIKE '%"+inpu+"%')")
+		quotes = cursor.fetchall()
 	
 	return quotes
 
@@ -163,10 +165,25 @@ def convertString(s):
 	return quoteText + " - " + authorText + "\n"
 
 
+#to avoid SQL-Injections; REGEX
+def getValidInput():
+	validInput = (r'^[A-Za-z, ]')
+	usersInput = input("You chose the terminal. Please enter your keyword now: ")
+
+	while True:
+		if(re.search(validInput,usersInput)):
+			print("Thank you, you will hear a noise-notification when we are done.\n")
+			break
+		else:
+			print("Invalid keyword! Please only use letters and commas!\n")
+			usersInput = input("Please enter your keyword now: ")
+
+	return usersInput
+
+
 #mainly to keep the main tidy
 def choseTerminal(foundQuotes):
-	terminalInput = input("You choose the terminal. Please enter your keyword now: ")
-	print("Thank you, you will hear a noise-notification when we are done.")
+	terminalInput = getValidInput()
 	foundQuotes = compareWithDBQuote(terminalInput)
 
 	return foundQuotes
@@ -182,6 +199,29 @@ def choseFile(foundQuotes):
 		compareToThis = str(fileContent[x])
 		inter = compareWithDBQuote(compareToThis.strip(" \n"))
 		foundQuotes.extend(inter)
+
+	outer = len(foundQuotes)
+	inner = len(foundQuotes)
+	y = 0
+	z = 0
+	for k in range(10):
+		for y in range(outer):
+			print("outer in y ", outer)
+			print("y in y ", outer)
+			if y < outer-1:
+				print("used y")
+				for z in range(inner):
+					print("inner in z ", inner)
+					print("y in z ", y)
+					print("z in z ", outer)
+					if z < inner-1:
+						print("used z")						
+						if (str(foundQuotes[y]) == str(foundQuotes[z])) and (z != y):
+							del foundQuotes[z]
+							print("delete")
+							
+						outer = len(foundQuotes)
+						inner = len(foundQuotes)
 
 	return foundQuotes
 
@@ -200,15 +240,16 @@ def dbSetup():
 	cursor.execute("CREATE TABLE IF NOT EXISTS e_mail_data (email varchar(255), pw varchar(255) DEFAULT 'not needed');")
 	cursor.execute("CREATE TABLE IF NOT EXISTS quotes (quote_count int(11) PRIMARY KEY, quote_text varchar(3072), author varchar(255));")
 	
+	#seed quotes
 	valuesDB = []
-
 	while True:
 		try:
-			file = open("quote_checker.sql", 'r')
+			file = open("src/quote_checker.sql", 'r')
 			break
 		except Exception as e:
 			print(e)
-			print("Sorry! Something went wrong. Please check if all your files are still in one directory.\n")
+			print("Sorry! Something went wrong. Please check if all your files are still in one directory and restart.\n")
+			exit(0)
 
 	for line in file:
 		valuesDB.append(line)
@@ -224,9 +265,28 @@ def dbSetup():
 		if int(count) < 100:
 			cursor.execute("INSERT INTO quotes(quote_count, quote_text, author) VALUES " + x + " ;")
 	
-	cursor.execute("INSERT INTO e_mail_data(email, pw) VALUES ('quote.checker@gmx.at', 'scriptingisttoll');")
+	#seed email
+	while True:
+		try:
+			file = open("src/e_mail_data.sql", 'r')
+			break
+		except Exception as e:
+			print(e)
+			print("Sorry! Something went wrong. Please check if all your files are still in one directory and restart.\n")
+			exit(0)
+	
+	for y in file:
+		cursor.execute("SELECT pw FROM e_mail_data;")
+		pwTest = str(cursor.fetchone()).replace(",", "")
+		pwTest = pwTest.replace("(", "")
+		pwTest = pwTest.replace(")", "")
+		if pwTest == "None":
+			pwTest = "0"
+		if pwTest == "0":
+			cursor.execute("INSERT INTO e_mail_data(email, pw) VALUES " + y + " ;")
+	file.close()
+	
 	cursor.execute("CREATE USER IF NOT EXISTS 'ro_user' IDENTIFIED BY 'RsycY3f1zIWn18MP';")
-	#cursor.execute("GRANT SELECT TO ro_user;")
 	connection.close()
 
 	return
@@ -241,12 +301,13 @@ except:
 	exit(0)
 
 again = True
-fileContent = []
-foundQuotes = []
-msg = "Dear QuoteChecker-User,\n\nWe are sorry to tell you, that our programm could not find any quotes or authors matching your text.\nWe hope to see you again soon!\n\nRegards,\nQuoteChecker"
+msg = "\n\nWe are sorry to tell you, that our programm could not find any quotes or authors matching your text.\n\n"
 
 print("Welcome to QuoteChecker!\n")
 while again:
+	fileContent = []
+	foundQuotes = []
+	booFound = True
 	print("Would you like to read a file to enter multiple keywords(f) or enter one word manually in this terminal (t)?")
 
 	while True:
@@ -256,28 +317,30 @@ while again:
 			sound()
 			if type(foundQuotes) != list:
 				print(msg)
-				exit(0)
+				booFound = False
 			break
 		elif inpuBoo == "T" or inpuBoo == "t":
 			foundQuotes = choseTerminal(foundQuotes)
 			sound()
 			if len(foundQuotes) == 0:
 				print(msg)
+				booFound = False
 			break
 		else:
 			print("Please only type 'f' or 't'!\n")
 
-	print("Would you like to get an E-Mail (e) with the findings or display them in the terminal(t)?")
-	while True:
-		sendBoo = input("Email or terminal? (e/t): ")
-		if sendBoo == "e" or sendBoo == "E":
-			sendEmail(foundQuotes)
-			break
-		elif sendBoo == "t" or sendBoo == "T":
-			print(getEmailMSG(foundQuotes))
-			break
-		else:
-			print("Please only type 'e' or 't'!\n")
+	if booFound:
+		print("Would you like to get an E-Mail (e) with the findings or display them in the terminal(t)?")
+		while True:
+			sendBoo = input("Email or terminal? (e/t): ")
+			if sendBoo == "e" or sendBoo == "E":
+				sendEmail(foundQuotes)
+				break
+			elif sendBoo == "t" or sendBoo == "T":
+				print(getEmailMSG(foundQuotes))
+				break
+			else:
+				print("Please only type 'e' or 't'!\n")
 
 	while True:
 		sendBoo = input("Would you like to search for more? (y/n): ")
