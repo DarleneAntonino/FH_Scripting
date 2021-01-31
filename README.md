@@ -60,7 +60,24 @@ As mentioned before, you can choose a file to read. You do not have to take our 
 
 
 ## Documentation
-> WIP
+
+1.	Access to Files
+
+By writing a keyword in the terminal, the keyword is saved in a file. Afterwards the input of this file is compared to the database. If you want to compare a file that you created, you have to give the program the path to your file. The file is then read by the program and compared to the database.
+
+2.	Access to Database
+
+When we first start the script, the connection to the database is made. If it fails to connect, you will get a message that says that you can't connect to the server. You don't have to create the tables yourself, the program will create them for you. The username and password are also automatically set.
+When you enter the path to an existing file or enter a keyword in the terminal, the input is compared to the quote table of the database. 
+There is also a table for sending mails. The password to the mail account is read out of the database.
+
+3.	Regex
+
+Reges is used when entering an email address, entering a filename and entering a keyword.
+
+4.	Notification
+
+We use beep sounds for notifications except when using a Mac, then you will here the Mac say "Done". The user will hear the sound to see if everythings alright with his input or when the email has been sent.
 
 ## Known Issues
 
