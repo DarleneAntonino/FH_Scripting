@@ -186,8 +186,54 @@ def choseFile(foundQuotes):
 	return foundQuotes
 
 
+#to create database
+def dbSetup():
+	try:
+		connection = mysql.connector.connect(host = "localhost", user = "root", passwd = "")
+		cursor = connection.cursor()
+	except:
+		print ("Keine Verbindung zum Server")
+		exit(0)
+
+	cursor.execute("CREATE DATABASE IF NOT EXISTS quote_checker;")
+	cursor.execute("USE quote_checker;")
+	cursor.execute("CREATE TABLE IF NOT EXISTS e_mail_data (email varchar(255), pw varchar(255) DEFAULT 'not needed');")
+	cursor.execute("CREATE TABLE IF NOT EXISTS quotes (quote_count int(11) PRIMARY KEY, quote_text varchar(3072), author varchar(255));")
+	
+	valuesDB = []
+
+	while True:
+		try:
+			file = open("quote_checker.sql", 'r')
+			break
+		except Exception as e:
+			print(e)
+			print("Sorry! Something went wrong. Please check if all your files are still in one directory.\n")
+
+	for line in file:
+		valuesDB.append(line)
+
+	file.close()
+	for x in valuesDB:
+		cursor.execute("SELECT MAX(quote_count) FROM quotes;")
+		count = str(cursor.fetchone()).replace(",", "")
+		count = count.replace("(", "")
+		count = count.replace(")", "")
+		if count == "None":
+			count = 0
+		if int(count) < 100:
+			cursor.execute("INSERT INTO quotes(quote_count, quote_text, author) VALUES " + x + " ;")
+	
+	cursor.execute("INSERT INTO e_mail_data(email, pw) VALUES ('quote.checker@gmx.at', 'scriptingisttoll');")
+	cursor.execute("CREATE USER IF NOT EXISTS 'ro_user' IDENTIFIED BY 'RsycY3f1zIWn18MP';")
+	#cursor.execute("GRANT SELECT TO ro_user;")
+	connection.close()
+
+	return
 
 # ----- MAIN -----
+dbSetup()
+
 try:
 	connection = mysql.connector.connect(host = "localhost", user = "ro_user", passwd = "RsycY3f1zIWn18MP", db = "quote_checker")
 except:
@@ -217,7 +263,6 @@ while again:
 			sound()
 			if len(foundQuotes) == 0:
 				print(msg)
-				exit(0)
 			break
 		else:
 			print("Please only type 'f' or 't'!\n")
