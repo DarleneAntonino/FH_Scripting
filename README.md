@@ -77,7 +77,8 @@ Reges is used when entering an email address, entering a filename and entering a
 
 4.	Notification
 
-We use beep sounds for notifications except when using a Mac, then you will here the Mac say "Done". The user will hear the sound to see if everythings alright with his input or when the email has been sent.
+We use beep sounds for notifications except when using a Mac, then you will here the Mac say "Done". The user will hear the sound when a matching quote or keyword is found. 
+You can also get your quotes by mail.
 
 ## Known Issues
 
