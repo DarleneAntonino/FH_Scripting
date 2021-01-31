@@ -335,6 +335,10 @@ while again:
 		#import for sound on iOS
 		import os
 		os.system('say "Done"')
+	elif platform.system() == "Linux":
+		#import for sound on Linux
+		import os
+		os.system('spd-say "Done"')
 
 	if booFound:
 		print("Would you like to get an E-Mail (e) with the findings or display them in the terminal(t)?")
