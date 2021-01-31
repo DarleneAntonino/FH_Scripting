@@ -18,8 +18,8 @@ This "project" contains/will implement/focus on:
 
 We created a program you can either read a file into or give it a single keyword/-phrase. Depending on your input it will show you several quotes which you can either view in the terminal or get send per email. The quotes will be saved into a database which will be created on start of the program IF it is not existing jet.
 
-# Quotes were taken from: www.quotes.net, www.goodreads.com, screenrant.com, www.rottentomatoes.com
-# contains no quotes of Donald Trump and J. K. Rowling
+#### Quotes were taken from: www.quotes.net, www.goodreads.com, screenrant.com, www.rottentomatoes.com
+#### contains no quotes of Donald Trump and J. K. Rowling
 
 
 ## Installation/Prerequisites for your repository
@@ -42,9 +42,13 @@ If you do not want to use a file, you can enter one keyword (or phrase) and will
 ## Run/Execute
 
 To run the program, you can either double-click on the file or run it in your terminal. When on Windows just write 
+
 > quotechecker.py
+
 on iOS 
+
 > python quotechecker.py
+
 After the greeting, you can choose to read a file or enter a word/phrase on the terminal.
 If you choose the file, you will be asked to enter the path to your file.txt. If the file is located in the same directory as the script it is enough to only write the name of the file. Remember not to forget the postfix ‘.txt’.
 The content of your file will be read and compared to our database. The same happens with your input in the terminal. You will get a noise notification when it has finished. If there are no matches, you will be informed immediately, and the program will end. If there are matches you will be asked if you want to get them per email or shown in the terminal. After you decided the program is finished and you will be asked if you want to go again or not.
