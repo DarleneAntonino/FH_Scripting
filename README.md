@@ -73,12 +73,12 @@ There is also a table for sending mails. The password to the mail account is rea
 
 3.	Regex
 
-Reges is used when entering an email address, entering a filename and entering a keyword.
+Regex is used when entering an email address, entering a filename and entering a keyword.
 
 4.	Notification
 
 We use beep sounds for notifications except when using a Mac, then you will here the Mac say "Done". The user will hear the sound when a matching quote or keyword is found. 
-You can also get your quotes by mail.
+You can also get your quotes by mail. You will get a message about receiving a mail shortly.
 
 ## Known Issues
 
