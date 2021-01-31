@@ -6,10 +6,10 @@ from smtplib import SMTP
 from email.message import EmailMessage
 #imports for regex
 import re
-#import for sound notification
-import winsound
 #import for db
 import mysql.connector
+#import for os recognicion
+import platform
 
 
 # ----- FUNCTIONS -----
@@ -314,20 +314,27 @@ while again:
 		inpuBoo = input("file or terminal? (f/t): ")
 		if inpuBoo == "F" or inpuBoo == "f":
 			foundQuotes = choseFile(foundQuotes)
-			sound()
 			if type(foundQuotes) != list:
 				print(msg)
 				booFound = False
 			break
 		elif inpuBoo == "T" or inpuBoo == "t":
 			foundQuotes = choseTerminal(foundQuotes)
-			sound()
 			if len(foundQuotes) == 0:
 				print(msg)
 				booFound = False
 			break
 		else:
 			print("Please only type 'f' or 't'!\n")
+
+	if platform.system() == "Windows":
+		#import for sound on Windows
+		import winsound
+		sound()
+	else:
+		#import for sound on iOS
+		import os
+		os.system('say "Done"')
 
 	if booFound:
 		print("Would you like to get an E-Mail (e) with the findings or display them in the terminal(t)?")
