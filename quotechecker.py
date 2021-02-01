@@ -77,7 +77,7 @@ def sendEmail(liste):
 	except Exception as e:
 	    print('Something went wrong')
 	    print(e)
-	    exit(1)
+	    exit(0)
 
 	return
 
@@ -247,14 +247,14 @@ def dbSetup():
 		valuesDB.append(line)
 
 	file.close()
-	for x in valuesDB:
-		cursor.execute("SELECT MAX(quote_count) FROM quotes;")
-		count = str(cursor.fetchone()).replace(",", "")
-		count = count.replace("(", "")
-		count = count.replace(")", "")
-		if count == "None":
-			count = 0
-		if int(count) < 100:
+	cursor.execute("SELECT MAX(quote_count) FROM quotes;")
+	count = str(cursor.fetchone()).replace(",", "")
+	count = count.replace("(", "")
+	count = count.replace(")", "")
+	if count == "None":
+		count = 0
+	if int(count) < 100:
+		for x in valuesDB:
 			cursor.execute("INSERT INTO quotes(quote_count, quote_text, author) VALUES " + x + " ;")
 	
 	#seed email
@@ -267,11 +267,11 @@ def dbSetup():
 			print("Sorry! Something went wrong. Please check if all your files are still in one directory and restart.\n")
 			exit(0)
 	
+	cursor.execute("SELECT pw FROM e_mail_data;")
+	pwTest = str(cursor.fetchone()).replace(",", "")
+	pwTest = pwTest.replace("(", "")
+	pwTest = pwTest.replace(")", "")
 	for y in file:
-		cursor.execute("SELECT pw FROM e_mail_data;")
-		pwTest = str(cursor.fetchone()).replace(",", "")
-		pwTest = pwTest.replace("(", "")
-		pwTest = pwTest.replace(")", "")
 		if pwTest == "None":
 			pwTest = "0"
 		if pwTest == "0":
@@ -287,6 +287,7 @@ def dbSetup():
 dbSetup()
 
 try:
+	#connection = mysql.connector.connect(host = "localhost", user = "root", passwd = "", db = "quote_checker")
 	connection = mysql.connector.connect(host = "localhost", user = "ro_user", passwd = "RsycY3f1zIWn18MP", db = "quote_checker")
 except:
 	print ("Keine Verbindung zum Server")
