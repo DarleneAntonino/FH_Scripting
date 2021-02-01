@@ -204,21 +204,13 @@ def choseFile(foundQuotes):
 	inner = len(foundQuotes)
 	y = 0
 	z = 0
-	for k in range(10):
+	for k in range(100):
 		for y in range(outer):
-			print("outer in y ", outer)
-			print("y in y ", outer)
 			if y < outer-1:
-				print("used y")
 				for z in range(inner):
-					print("inner in z ", inner)
-					print("y in z ", y)
-					print("z in z ", outer)
-					if z < inner-1:
-						print("used z")						
+					if z < inner-1:					
 						if (str(foundQuotes[y]) == str(foundQuotes[z])) and (z != y):
 							del foundQuotes[z]
-							print("delete")
 							
 						outer = len(foundQuotes)
 						inner = len(foundQuotes)
@@ -331,14 +323,14 @@ while again:
 		#import for sound on Windows
 		import winsound
 		sound()
-	else:
-		#import for sound on iOS
-		import os
-		os.system('say "Done"')
 	elif platform.system() == "Linux":
 		#import for sound on Linux
 		import os
 		os.system('spd-say "Done"')
+	else:
+		#import for sound on iOS
+		import os
+		os.system('say "Done"')
 
 	if booFound:
 		print("Would you like to get an E-Mail (e) with the findings or display them in the terminal(t)?")
