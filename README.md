@@ -90,3 +90,5 @@ You can also get your quotes by mail. You will get a message about receiving a m
 If you use this program multiple times in a short amount of time and send an email every time, it can be put into your SPAM directory. If you “do not get an email” take a look into your SPAM directory. Normally it is enough to declare it as NO SPAM once.
 
 If you put the same keyword/-phrase into the file multiple times in a row, the last quote you recive will have a duplicate.
+
+If there is a connection error, you can try to drop the database login data and use the standard login data. User - "root" and password "".
