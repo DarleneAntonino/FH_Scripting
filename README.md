@@ -25,7 +25,12 @@ We created a program you can either read a file into or give it a single keyword
 ## Installation/Prerequisites for your repository
 
 First of all, you want to install Python 3. Click the following Link (https://www.python.org/downloads/) and follow the instructions. 
-To be able to connect to the database first run ‘python -m pip install mysql-connector-python’ in your Terminal. It might will ask you to upgrade/update (at least on windows). Just run the provided command.
+
+To be able to connect to the database first run 
+
+> python -m pip install mysql-connector-python 
+
+in your Terminal. It might will ask you to upgrade/update (at least on windows). Just run the provided command.
 Also make sure to run XAMPP and start Apache and MySQL! Otherwise you won’t be able to connect to the database.
 It is also recommended to prepare a text file in the directory you store the script in. The content of this yourFilename.txt can be chosen freely by you. Nonetheless you want to either enter the name of an author, actor, politician,… or a keyword or even a whole quote. Remember you can enter multiple values, but you must use a new line for every value. We included an example file in the project.
 
@@ -63,12 +68,12 @@ As mentioned before, you can choose a file to read. You do not have to take our 
 
 1.	Access to Files
 
-By writing a keyword in the terminal, the keyword is saved in a file. Afterwards the input of this file is compared to the database. If you want to compare a file that you created, you have to give the program the path to your file. The file is then read by the program and compared to the database.
+The input of the chosen file is compared to the database. The database values are also saved inside a file. With starting the program the content will be read and (if nesscessary) inserted in the tables.
 
 2.	Access to Database
 
-When we first start the script, the connection to the database is made. If it fails to connect, you will get a message that says that you can't connect to the server. You don't have to create the tables yourself, the program will create them for you. The username and password are also automatically set.
-When you enter the path to an existing file or enter a keyword in the terminal, the input is compared to the quote table of the database. 
+When we first start the script, the connection to the database is made. If it fails to connect, you will get a message that says you can't connect to the server. You don't have to create the tables yourself, the program will create them for you. The username and password for a read-only-user are also automatically set.
+When you enter the path to an existing file or enter a keyword in the terminal, the input is compared to a the quote table of the database. 
 There is also a table for sending mails. The password to the mail account is read out of the database.
 
 3.	Regex
@@ -77,10 +82,11 @@ Regex is used when entering an email address, entering a filename and entering a
 
 4.	Notification
 
-We use beep sounds for notifications except when using a Mac, then you will here the Mac say "Done". The user will hear the sound when a matching quote or keyword is found. 
+We use beep sounds for notifications except when using iOS or Linux, then you will here the Terminal say "Done". The user will hear the sound when the matching procedure is finished. 
 You can also get your quotes by mail. You will get a message about receiving a mail shortly.
 
 ## Known Issues
 
 If you use this program multiple times in a short amount of time and send an email every time, it can be put into your SPAM directory. If you “do not get an email” take a look into your SPAM directory. Normally it is enough to declare it as NO SPAM once.
 
+If you put the same keyword/-phrase into the file multiple times in a row, the last quote you recive will have a duplicate.
